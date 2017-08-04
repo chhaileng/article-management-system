@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8" />
+<link th:href="'/css/bootstrap.min.css'" rel="stylesheet" />
+<link th:href="'/css/bootstrap.css'" rel="stylesheet" />
+<script th:src="'/js/jquery-3.2.1.min.js'"></script>
+<script th:src="'/js/bootstrap.min.js'"></script>
+
+<link href="https://fonts.googleapis.com/css?family=Battambang|Roboto" rel="stylesheet" />
+<link th:href="'/css/style.css'" rel="stylesheet" />
+<style>
+	.table > tbody > tr > td {
+    	vertical-align: middle;
+	}
+</style>
+<title th:text="#{title.artitle}">Article Management System</title>
+
+</head>
+<body>
+	<!-- Header -->
+	<div th:replace="fragments/header :: header"></div>
+	
+	<!-- Body -->
+	<div class="container">
+		<table class="table table-hover">
+			<tr class="active">
+				<th style="width: 4%" class="active">#</th>
+				<th style="width: 25%" class="active" th:text="#{article.title}">Title</th>
+				<th style="width: 8%" class="active" th:text="#{article.date}">Date</th>
+				<th style="width: 15%" class="active" th:text="#{article.author}">Author</th>
+				<th style="width: 13%" class="active" th:text="#{article.category}">Category</th>
+				<th style="width: 10%" class="active" th:text="#{article.thumbnail}">Thumbnail</th>
+				<th th:if="${#authorization.expression('hasAnyRole(''ROLE_ADMIN'',''ROLE_USER'')')}" style="width: 20%" class="active" th:text="#{label.action}">Action</th>
+			</tr>
+			<tr class="active" th:each="article : ${articles}"
+				th:object="${article}">
+				<td class="active" th:text="*{id}">1</td>
+				<td class="active" th:text="*{title}">Java Programming</td>
+				<td class="active" th:text="*{date}">2017-01-08</td>
+				<td class="active" th:text="*{author}">Chhaileng Peng</td>
+				<td class="active" th:text="*{articleCategory.cat_name}">Tech</td>
+				<td class="active"><img style="width: 70px; height: 70px" th:src="@{*{thumbnail}}" alt="Thumbnail" class="img-thumbnail" /></td>
+				<td th:if="${#authorization.expression('hasAnyRole(''ROLE_ADMIN'',''ROLE_USER'')')}" class="active">
+					<a th:href="@{/article/view/{id}(id=*{id})}" type="button" class="btn btn-primary" th:text="#{btn.view}">View</a>
+					<a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" th:href="@{/article/edit/{id}(id=*{id})}" type="button" class="btn btn-info" th:text="#{btn.edit}">Edit</a>
+					<a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" th:href="@{/remove/article(id=*{id})}" type="button" class="btn btn-danger" th:text="#{btn.remove}">Remove</a>
+				</td>
+			</tr>
+		</table>
+		
+		<!-- Pagination Area -->
+		<nav th:if="${paging.totalCount}>10" th:remove="tag" aria-label="Page navigation">
+			<ul class="pagination pull-right">
+			 	<li><a title="First" th:href="@{/article/(page=1, article_title=${filter.article_title}, category_id=${filter.category_id})}">First</a></li>
+			 	<li><a th:href="@{/article/(page=${paging.previousPage}, article_title=${filter.article_title}, category_id=${filter.category_id})}"><span>&laquo;</span></a></li>
+			 	
+			 	<li th:each="i: ${#numbers.sequence(paging.startPage, paging.endPage)}" th:class="${paging.page}==${i}?'active'">
+			 		<a th:text="${i}" th:href="@{/article/(page=${i}, article_title=${filter.article_title}, category_id=${filter.category_id})}">1</a>
+			 	</li>
+			 	
+			 	<li><a th:href="@{/article/(page=${paging.nextPage}, article_title=${filter.article_title}, category_id=${filter.category_id})}"><span>&raquo;</span></a></li>
+			 	<li><a title="Last" th:href="@{/article/(page=${paging.totalPages}, article_title=${filter.article_title}, category_id=${filter.category_id})}">Last</a></li>
+			</ul>
+		</nav>
+	</div>
+	
+	<!-- Footer -->
+	<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

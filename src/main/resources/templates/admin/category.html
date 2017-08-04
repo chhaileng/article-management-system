@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<link th:href="'/css/bootstrap.min.css'" rel="stylesheet" />
+<link th:href="'/css/bootstrap.css'" rel="stylesheet" />
+<script th:src="'/js/jquery-3.2.1.min.js'"></script>
+<script th:src="'/js/bootstrap.min.js'"></script>
+
+<link href="https://fonts.googleapis.com/css?family=Battambang|Roboto" rel="stylesheet"/>
+<link th:href="'/css/style.css'" rel="stylesheet"/>
+
+<title th:text="${isAddCat}?'__#{title.add_category}__':'__#{title.edit_category}__'">Add New Article</title>
+
+</head>
+<body>
+	<!-- Header -->
+	<div th:replace="fragments/header :: header"></div>
+	
+	<!-- Body -->
+	<div class="container">
+		<ol class="breadcrumb">
+			<li><a href="/article" th:text="#{breadcrumb.AMS}">ARTICLE MANAGEMENT SYSTEM</a></li>
+			<li th:text="#{breadcrumb.categories}">Categories</li>
+			<li th:text="${isAddCat}?'__#{breadcrumb.add_new_category}__':'__#{breadcrumb.edit_category}__'">Add New</li>
+		</ol>
+		<form class="form-horizontal" th:action="${isAddCat}?'/article/category/save':'/article/category/edit/save'" method="POST">
+			<input type="hidden" th:field="${category.cat_id}" />
+			<div class="form-group">
+				<label class="col-sm-2 control-label" th:text="#{category.name}">Category Name</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" placeholder="Category Name" th:placeholder="#{category.name}" th:field="${category.cat_name}"/>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button type="submit" class="btn btn-default" th:text="${isAddCat}?'__#{btn.save_category}__':'__#{btn.update_category}__'">Save</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<div class="container">
+		<div class="col-md-2"></div>
+		<div class="col-md-8">
+			<table class="table table-hover">
+				<tr class="active">
+					<th class="active" th:text="#{category.id}">Category ID</th>
+					<th class="active" th:text="#{category.name}">Category Name</th>
+					<th class="active" th:text="#{label.action}">Action</th>
+				</tr>
+				<tr class="active" th:each="category : ${categories}">
+					<td class="active" th:text="${category.cat_id}">1</td>
+					<td class="active" th:text="${category.cat_name}">Category Name</td>
+					<td class="active">
+						<a th:href="@{/article/category/edit/{id}(id=${category.cat_id})}" type="button" class="btn btn-info" th:text="#{btn.edit}">Edit</a>
+						<a th:href="@{/article/category/remove?id={id}(id=${category.cat_id})}" type="button" class="btn btn-danger" th:text="#{btn.remove}">Remove</a>
+						<a th:href="@{/article/(article_title='',category_id=${category.cat_id})}" type="button" class="btn btn-primary" th:text="#{btn.view}">View</a>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="col-md-2"></div>
+	</div>
+
+	<!-- Footer -->
+	<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

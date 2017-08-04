@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<link th:href="'/css/bootstrap.min.css'" rel="stylesheet" />
+<link th:href="'/css/bootstrap.css'" rel="stylesheet" />
+<script th:src="'/js/jquery-3.2.1.min.js'"></script>
+<script th:src="'/js/bootstrap.min.js'"></script>
+
+<link href="https://fonts.googleapis.com/css?family=Battambang|Roboto" rel="stylesheet"/>
+<link th:href="'/css/style.css'" rel="stylesheet"/>
+
+<title th:text="${article.title} + ' - __#{title.view}__'">Article Management System</title>
+
+</head>
+<body>
+	<!-- Header -->
+	<div th:replace="fragments/header :: header"></div>
+
+	<!-- Body -->
+	<div class="container">
+		<ol class="breadcrumb">
+			<li><a href="/article" th:text="#{breadcrumb.AMS}">ARTICLE MANAGEMENT SYSTEM</a></li>
+			<li th:text="#{breadcrumb.article_detail}">Article Detail</li>
+		</ol>
+		<div class="row" th:object="${article}">
+			<div class="col-md-8">
+				<div class="form-horizontal">
+					<div class="form-group">
+						<label class="col-sm-2 control-label" th:text="#{article.id}">ID</label>
+						<div class="col-sm-10">
+							<p class="form-control-static" th:text="*{id}">1</p>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label" th:text="#{article.title}">Title</label>
+						<div class="col-sm-10">
+							<p class="form-control-static" th:text="*{title}">Java
+								Programming Language</p>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label" th:text="#{article.date}">Date</label>
+						<div class="col-sm-10">
+							<p class="form-control-static" th:text="*{date}">2017-01-08</p>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label" th:text="#{article.author}">Author</label>
+						<div class="col-sm-10">
+							<p class="form-control-static" th:text="*{author}">Chhaileng
+								Peng</p>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label" th:text="#{article.category}">Category</label>
+						<div class="col-sm-10">
+							<p class="form-control-static" th:text="*{articleCategory.cat_name}">News</p>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label" th:text="#{article.description}">Description</label>
+						<div class="col-sm-10">
+							<p class="form-control-static" th:text="*{description}">Hello
+								world this is test. Hello world this is test. Hello world this
+								is test. Hello world this is test.</p>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<div class="col-md-4">
+				<img style="width: 300px; height: 300px" th:src="*{thumbnail}"
+					alt="thumbnail" class="img-thumbnail" />
+			</div>
+		</div>
+		<!--  row  -->
+		<div class="row">
+			<nav aria-label="...">
+				<ul class="pager">
+					<li class="previous" th:class="${previousId}==0?'previous disabled':'previous'"><a href="#" th:href="${previousId}==0?'#':'/article/view/' + ${previousId}"><span aria-hidden="true">&larr;</span> <span th:text="#{btn.previous}">Previous</span></a></li>
+					<li class="next" th:class="${nextId}==0?'next disabled':'next'"><a href="#" th:href="${nextId}==0?'#':'/article/view/' + ${nextId}"><span th:text="#{btn.next}">Next</span> <span aria-hidden="true">&rarr;</span></a></li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+	
+	<!-- Footer -->
+	<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>
